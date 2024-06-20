@@ -134,19 +134,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const raycaster = new THREE.Raycaster();
 
-    let locationRoomModel, detectionModel, roomTextModel;
-    let locationYard1Model;
-    let cameraModel, detection2Model;
-    let macbookModel, detection3Model;
-    let textDrawRotationModel, textDrawRotationMixer;
-    let turnbackModel;
-    let bunniesModel, detection4Model;
-    let uoslogoRotationModel, uoslogoRotationMixer;
+    let locationYard2Model;
+    let locationYard3Model;
+    let Yardtext3Model;
+    let classtextModel;
 
     const groups = {
-        room: ['room.glb', 'bluebook.glb', '001detection.glb', 'macbook_inroom.glb', '003detection.glb', 'camera.glb', '002detection.glb', 'room_text.glb','location_room.glb'],
-        hall: ['hall.glb', 'text_draw_rotation.glb','hall_text.glb','bunnies.glb', 'hall_2.glb', 'hall_face.glb', 'turnback.glb', '004detection.glb'],
-        yard1: ['yard1.glb', 'location_yard1.glb', 'yard1_text_rotation.glb', 'uos_logo.glb']
+        yard2: ['../yard2.glb', '../location_yard2.glb'],
+        yard3: ['../yard3.glb', '../yard3_text.glb', '../yard3_text2.glb', '../location_yard3.glb'],
+        class: ['../class.glb', '../class_text.glb']
     };
 
     const loader = new THREE.GLTFLoader();
@@ -161,55 +157,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 const model = gltf.scene;
                 groupContainer.add(model);
                 console.log(`Loaded ${url} into group ${groupName}`);
-                if (url === 'location_room.glb') locationRoomModel = model;
-                if (url === 'location_yard1.glb') locationYard1Model = model;
-                if (url === 'bluebook.glb') bluebookModel = model;
-                if (url === '001detection.glb') {
-                    detectionModel = model;
-                    detectionModel.visible = false;
-                }
-                if (url === 'camera.glb') cameraModel = model;
-                if (url === '002detection.glb') {
-                    detection2Model = model;
-                    detection2Model.visible = false;
-                }
-                if (url === 'macbook_inroom.glb') macbookModel = model;
-                if (url === '003detection.glb') {
-                    detection3Model = model;
-                    detection3Model.visible = false;
-                }
-                if (url === 'bunnies.glb') bunniesModel = model;
-                if (url === '004detection.glb') {
-                    detection4Model = model;
-                    detection4Model.visible = false;
-                }
-                if (url === 'room_text.glb') {
-                    roomTextModel = model;
-                    roomTextModel.traverse(child => {
+                if (url === '../location_yard2.glb') locationYard2Model = model;
+                if (url === '../location_yard3.glb') locationYard3Model = model;
+                if (url === '../yard3_text.glb') {
+                    Yardtext3Model = model;
+                    Yardtext3Model.traverse(child => {
                         if (child.isMesh) {
                             child.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
                             child.layers.enable(1);
                         }
                     });
                 }
-                if (url === 'turnback.glb') {
-                    turnbackModel = model;
-                    turnbackModel.traverse(child => {
-                        if (child.isMesh) {
-                            child.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-                            child.layers.enable(1);
-                        }
-                    });
-                }
-                if (url === 'text_draw_rotation.glb') {
-                    textDrawRotationModel = model;
-                    if (gltf.animations && gltf.animations.length) {
-                        textDrawRotationMixer = new THREE.AnimationMixer(model);
-                        gltf.animations.forEach(clip => {
-                            textDrawRotationMixer.clipAction(clip).play();
-                        });
-                    }
-                    textDrawRotationModel.traverse(child => {
+                if (url === '../class_text.glb') {
+                    classtextModel = model;
+                    classtextModel.traverse(child => {
                         if (child.isMesh) {
                             child.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
                             child.layers.enable(1);
@@ -350,116 +311,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const intersects = raycaster.intersectObjects(scene.children, true);
 
-        let foundLocationRoom = false;
-        let foundLocationYard1 = false;
-        let foundBluebook = false;
-        let foundCamera = false;
-        let foundMacbook = false;
-        let foundBunnies = false;
+        let foundLocationYard2 = false;
+        let foundLocationYard3 = false;
 
         if (intersects.length > 0) {
             const intersectedObject = intersects[0].object;
-            if (locationRoomModel && (intersectedObject === locationRoomModel || locationRoomModel.children.includes(intersectedObject))) {
-                foundLocationRoom = true;
+            if (locationYard2Model && (intersectedObject === locationYard2Model || locationYard2Model.children.includes(intersectedObject))) {
+                foundLocationYard2 = true;
             }
-            if (locationYard1Model && (intersectedObject === locationYard1Model || locationYard1Model.children.includes(intersectedObject))) {
-                foundLocationYard1 = true;
-            }
-            if (bluebookModel && (intersectedObject === bluebookModel || bluebookModel.children.includes(intersectedObject))) {
-                foundBluebook = true;
-            }
-            if (cameraModel && (intersectedObject === cameraModel || cameraModel.children.includes(intersectedObject))) {
-                foundCamera = true;
-            }
-            if (macbookModel && (intersectedObject === macbookModel || macbookModel.children.includes(intersectedObject))) {
-                foundMacbook = true;
-            }
-            if (bunniesModel && (intersectedObject === bunniesModel || bunniesModel.children.includes(intersectedObject))) {
-                foundBunnies = true;
-            }
-            if (turnbackModel && (intersectedObject === turnbackModel || turnbackModel.children.includes(intersectedObject))) {
-                window.location.href = './phase2/index.html'; // 두 번째 페이지로 이동
+            if (locationYard3Model && (intersectedObject === locationYard3Model || locationYard3Model.children.includes(intersectedObject))) {
+                foundLocationYard3 = true;
             }
         }
 
-        if (detectionModel) {
-            if (foundBluebook) {
-                detectionModel.visible = true;
-                detectionModel.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.enable(1);
-                    }
-                });
-            } else {
-                detectionModel.visible = false;
-                detectionModel.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.disable(1);
-                    }
-                });
-            }
+        if (foundLocationYard2) {
+            fetchWeatherData(37.61, 127.09);
         }
 
-        if (detection2Model) {
-            if (foundCamera) {
-                detection2Model.visible = true;
-                detection2Model.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.enable(1);
-                    }
-                });
-            } else {
-                detection2Model.visible = false;
-                detection2Model.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.disable(1);
-                    }
-                });
-            }
-        }
-
-        if (detection3Model) {
-            if (foundMacbook) {
-                detection3Model.visible = true;
-                detection3Model.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.enable(1);
-                    }
-                });
-            } else {
-                detection3Model.visible = false;
-                detection3Model.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.disable(1);
-                    }
-                });
-            }
-        }
-
-        if (detection4Model) {
-            if (foundBunnies) {
-                detection4Model.visible = true;
-                detection4Model.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.enable(1);
-                    }
-                });
-            } else {
-                detection4Model.visible = false;
-                detection4Model.traverse(function(child) {
-                    if (child.isMesh) {
-                        child.layers.disable(1);
-                    }
-                });
-            }
-        }
-
-        if (foundLocationRoom) {
+        if (foundLocationYard3) {
             fetchWeatherData(37.61, 127.10);
-        }
-
-        if (foundLocationYard1) {
-            fetchWeatherData(37.58, 127.06); 
         }
     }
 
@@ -492,7 +362,7 @@ function createSphericalText(textArray, font, radius) {
 }
     
     const fontLoader = new THREE.FontLoader();
-    fontLoader.load('../Noto Sans KR_Regular.json', function(font) {
+    fontLoader.load('../../Noto Sans KR_Regular.json', function(font) {
         const longText = `playable rP 테크놀로지 포복 뒤 호텔 방 하늘에서 떨어지는 폭탄 icbm 푸른 초원 사이 흐르는 시냇물과 강 돌 전력질주 암벽과 용암 갈라진 절벽에 붙은 나무껍질을 뗴고 비상 후 추락 횃불이 밝히는 어둠으로 가득 차있는 동굴 너머 보이는 박쥐의 형상 다시 돌아와 초록빛깔 공기 속에 갇힌 도시 매트릭스현실 검은 서글라스를 피부처럼 끼고있는 사람들 위로 떨어지는 가스폭탄 초록색 가스 방독면을 쓰고 돌진 광원 벤츠로고같은 삼각별이 회전하고 초록색이 번져나가 은하계 성운을 이룬다 도마뱀 도마뱀의 꼬리를 도끼로 내려찍고 보이는 건 피를 흘리며 기어서 탈출하는 도마뱀 추적하는 화살 옆 터지는 파열음 공기와 마찰음 pure sense 화강암 석좌 위 불길이 번지고 그 안에 보이는 새의 형상 손바닥의 냄새 흐르는 땀을 움켜쥐고 구슬을 놓쳐 땅에 떨어진 뒤 산산조각 머리를 찌르는 편두통 오른쪽 관자놀이부터 찔려들어가 왼쪽으로 나오진 못해 중앙에 걸쳐있어 뽑으면 피가나니까 꺾어서 멈추자`;
 
         const textArray = longText.match(/.{1,10}/g); // 30자 단위로 텍스트를 나눕니다.
@@ -554,8 +424,6 @@ function createSphericalText(textArray, font, radius) {
         requestAnimationFrame(animate);
         updateSpotlight();
         const delta = clock.getDelta();
-        if (textDrawRotationMixer) textDrawRotationMixer.update(delta);
-        if (uoslogoRotationMixer) uoslogoRotationMixer.update(delta);
 
         velocity.x -= velocity.x * 10.0 * delta;
         velocity.z -= velocity.z * 10.0 * delta;
@@ -581,9 +449,9 @@ function createSphericalText(textArray, font, radius) {
         localStorage.setItem('cameraRotation', JSON.stringify(camera.rotation));
     }
 
-    function blinkRoomText() {
-        if (roomTextModel) {
-            roomTextModel.traverse(child => {
+    function blinkYard3Text() {
+        if (Yardtext3Model) {
+            Yardtext3Model.traverse(child => {
                 if (child.isMesh) {
                     child.visible = !child.visible;
                 }
@@ -591,9 +459,9 @@ function createSphericalText(textArray, font, radius) {
         }
     }
 
-    function blinkTurnBack() {
-        if (turnbackModel) {
-            turnbackModel.traverse(child => {
+    function blinkClassText() {
+        if (classtextModel) {
+            classtextModel.traverse(child => {
                 if (child.isMesh) {
                     child.visible = !child.visible;
                 }
@@ -601,19 +469,8 @@ function createSphericalText(textArray, font, radius) {
         }
     }
 
-    function blinkRotationText() {
-        if (textDrawRotationModel) {
-            textDrawRotationModel.traverse(child => {
-                if (child.isMesh) {
-                    child.visible = !child.visible;
-                }
-            });
-        }
-    }
-
-    setInterval(blinkRoomText, 500);
-    setInterval(blinkRotationText, Math.random());
-    setInterval(blinkTurnBack, Math.random());
+    setInterval(blinkYard3Text, Math.random());
+    setInterval(blinkClassText, Math.random());
 
     animate();
 
