@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     const page = selectedObject.userData.page;
                     if (page) {
-                        const popupWindow = window.open(page, 'popupWindow', 'width=1920,height=1080,resizable');
+                        const popupWindow = window.open(page, 'popupWindow','InnerSpace', 'width=1920,height=1080,resizable');
                         mapPopupWindow = window.open('./map/index.html', 'mapPopup', 'width=500,height=500,resizable');
                         if (popupWindow && mapPopupWindow) {
                             popupWindow.focus();
