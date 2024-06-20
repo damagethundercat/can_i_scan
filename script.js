@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let pointCloud;
     let textMesh;
     let lineSegments;
+    let isAnimationRunning = true;
 
     // 드롭다운 메뉴 토글 기능 추가
     const readMeButton = document.getElementById('readMeButton');
@@ -242,6 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             mapPopupWindow.focus();
                             mapPopupWindow.resizeTo(500,500);
                             mapPopupWindow.onresize = (_=>{ mapPopupWindow.resizeTo(500,500); });
+                            isAnimationRunning = false; // 애니메이션 중지
+                            
                         } else {
                             alert('Popup blocked. Please allow popups for this website.');
                         }
@@ -272,26 +275,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function animate() {
         requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
+        
+        if (isAnimationRunning) {
+            controls.update();
+            renderer.render(scene, camera);
 
-        // 모델이 회전하도록 애니메이션 추가
-        if (modelInstance && !pointCloud) {
-            modelInstance.rotation.y += 0.01; // 천천히 회전
-        }
+            // 모델이 회전하도록 애니메이션 추가
+            if (modelInstance && !pointCloud) {
+                modelInstance.rotation.y += 0.01; // 천천히 회전
+            }
 
-        if (pointCloud) {
-            pointCloud.rotation.y += 0.01; // 포인트 클라우드도 천천히 회전
-        }
+            if (pointCloud) {
+                pointCloud.rotation.y += 0.01; // 포인트 클라우드도 천천히 회전
+            }
 
-        // 라인 세그먼트도 회전
-        if (lineSegments) {
-            lineSegments.rotation.y += 0.01;
-        }
+            // 라인 세그먼트도 회전
+            if (lineSegments) {
+                lineSegments.rotation.y += 0.01;
+            }
 
-        // 텍스트도 모델과 함께 회전
-        if (textMesh) {
-            textMesh.rotation.y += 0.01; // 천천히 회전
+            // 텍스트도 모델과 함께 회전
+            if (textMesh) {
+                textMesh.rotation.y += 0.01; // 천천히 회전
+            }
         }
     }
 
