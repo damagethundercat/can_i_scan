@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
-                if (url === 'yard1_text_rotation.glb') {
+                /*if (url === 'yard1_text_rotation.glb') {
                     textYardRotationModel = model;
                     if (gltf.animations && gltf.animations.length) {
                         textYardRotationMixer = new THREE.AnimationMixer(model);
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             child.layers.enable(1);
                         }
                     });
-                }
+                }*/
                 if (url === 'uos_logo.glb') {
                     uoslogoRotationModel = model;
                     if (gltf.animations && gltf.animations.length) {
@@ -607,11 +607,11 @@ function createSphericalText(textArray, font, radius) {
         scene.add(textGroup);
     
         // 텍스트 회전 애니메이션
-        function rotateText() {
+        /*function rotateText() {
             textGroup.rotation.y += 0.01;
             requestAnimationFrame(rotateText);
         }
-        rotateText();
+        rotateText();*/
     });
 
     function render() {
@@ -707,9 +707,9 @@ function createSphericalText(textArray, font, radius) {
     }
     setInterval(blinkRoomText, 500);  // 500ms 간격으로 점멸
     setInterval(blinkRotationText, Math.random());
-    setInterval(blinkTurnBack, Math.random());
+    /*setInterval(blinkTurnBack, Math.random());
     setInterval(blinkYard3Text, Math.random());
-    setInterval(blinkClassText, Math.random());
+    setInterval(blinkClassText, Math.random());*/
 
     animate();
 
